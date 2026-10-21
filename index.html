@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ابدأ التداول | Deriv Egypt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#ff444f; --primary-dark:#e63540; --primary-light:#fff1f2;
+  --dark:#0f172a; --text:#334155; --muted:#64748b;
+  --light:#f8fafc; --border:#e2e8f0; --success:#10b981;
+  --radius:14px; --shadow:0 10px 40px rgba(15,23,42,.08);
+  --shadow-lg:0 20px 60px rgba(15,23,42,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden}
+body{
+  font-family:'Cairo',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--text); background:#fff; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+body.lang-ar .en{display:none!important}
+body.lang-en .ar{display:none!important}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+.container{max-width:1100px;margin:0 auto;padding:0 18px}
+
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.header__inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--dark);font-size:18px}
+.logo__mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;display:grid;place-items:center;font-size:20px;font-weight:800}
+.lang-toggle{padding:8px 14px;border:1.5px solid var(--border);border-radius:999px;font-weight:700;font-size:14px;color:var(--dark);transition:.2s}
+.lang-toggle:hover{border-color:var(--primary);color:var(--primary)}
+
+.hero{padding:28px 0 40px;background:linear-gradient(180deg,var(--primary-light) 0%,#fff 100%)}
+.hero__grid{display:grid;gap:28px;align-items:start}
+@media(min-width:900px){.hero__grid{grid-template-columns:1.05fr 1fr;gap:56px;padding:40px 0}}
+.badge{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);padding:6px 12px;border-radius:999px;font-size:13px;font-weight:600;color:var(--dark);margin-bottom:16px}
+.badge__dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 0 4px rgba(16,185,129,.15)}
+.hero h1{font-size:30px;line-height:1.25;font-weight:800;color:var(--dark);margin-bottom:14px}
+@media(min-width:900px){.hero h1{font-size:44px}}
+.hero h1 .accent{color:var(--primary)}
+.hero__sub{font-size:16px;color:var(--muted);margin-bottom:22px;max-width:520px}
+.hero__points{list-style:none;display:grid;gap:10px;margin-bottom:8px}
+.hero__points li{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;color:var(--dark)}
+.hero__points svg{flex-shrink:0;width:20px;height:20px;color:var(--success)}
+
+.form-card{background:#fff;border-radius:18px;padding:26px 22px;box-shadow:var(--shadow-lg);border:1px solid var(--border);position:relative}
+.form-card__title{font-size:20px;font-weight:800;color:var(--dark);margin-bottom:4px;text-align:center}
+.form-card__sub{font-size:13.5px;color:var(--muted);margin-bottom:20px;text-align:center}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13.5px;font-weight:700;color:var(--dark);margin-bottom:6px}
+.field input{width:100%;padding:13px 14px;border:2px solid var(--border);border-radius:10px;font-size:16px;font-family:inherit;color:var(--dark);background:#fff;transition:.2s;outline:none}
+.field input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(255,68,79,.1)}
+.field.error input{border-color:#ef4444;background:#fef2f2}
+.field__error{color:#ef4444;font-size:12.5px;margin-top:5px;display:none;font-weight:600}
+.field.error .field__error{display:block}
+.btn-submit{width:100%;padding:15px 20px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-weight:800;font-size:17px;box-shadow:0 8px 20px rgba(255,68,79,.35);transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(255,68,79,.45)}
+.btn-submit:disabled{opacity:.75;cursor:not-allowed;transform:none}
+.btn-submit.loading::after{content:"";width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.form-card__note{font-size:12px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
+.form-card__secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--muted);margin-top:10px;font-weight:600}
+
+.trustbar{padding:22px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--light)}
+.trustbar__inner{display:flex;flex-wrap:wrap;justify-content:center;gap:18px 32px;align-items:center}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:var(--dark)}
+.trust-item svg{width:18px;height:18px;color:var(--primary)}
+
+.section{padding:52px 0}
+.section__title{text-align:center;font-size:26px;font-weight:800;color:var(--dark);margin-bottom:8px}
+.section__sub{text-align:center;font-size:15px;color:var(--muted);margin-bottom:36px;max-width:560px;margin-inline:auto}
+.steps{display:grid;gap:20px}
+@media(min-width:768px){.steps{grid-template-columns:repeat(3,1fr);gap:24px}}
+.step{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;text-align:center;transition:.2s}
+.step:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.step__num{width:44px;height:44px;border-radius:12px;background:var(--primary-light);color:var(--primary);display:grid;place-items:center;font-weight:800;font-size:18px;margin:0 auto 14px}
+.step h3{font-size:16px;font-weight:800;color:var(--dark);margin-bottom:6px}
+.step p{font-size:14px;color:var(--muted)}
+
+.faq{max-width:720px;margin:0 auto;display:grid;gap:10px}
+.faq__item{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff}
+.faq__q{width:100%;padding:16px 18px;text-align:start;font-weight:700;color:var(--dark);font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq__q::after{content:"+";font-size:22px;color:var(--primary);font-weight:400;transition:.2s}
+.faq__item.open .faq__q::after{transform:rotate(45deg)}
+.faq__a{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 18px;font-size:14px;color:var(--muted)}
+.faq__item.open .faq__a{max-height:200px;padding:0 18px 16px}
+
+.footer{padding:28px 0;border-top:1px solid var(--border);background:var(--light);text-align:center;font-size:13px;color:var(--muted)}
+.footer p+p{margin-top:6px}
+.footer strong{color:var(--dark)}
+
+.sticky-cta{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:#fff;border-top:1px solid var(--border);box-shadow:0 -8px 24px rgba(0,0,0,.08);z-index:90;display:block}
+@media(min-width:900px){.sticky-cta{display:none}}
+.sticky-cta button{width:100%;padding:14px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-weight:800;font-size:16px;box-shadow:0 6px 16px rgba(255,68,79,.35)}
+
+.overlay{
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(15,23,42,.85);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  animation:fadeIn .25s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.overlay[hidden]{display:none}
+.overlay__card{background:#fff;border-radius:20px;padding:36px 26px;max-width:420px;width:100%;text-align:center;box-shadow:var(--shadow-lg);animation:pop .35s cubic-bezier(.18,.89,.32,1.28)}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.overlay__icon{width:72px;height:72px;border-radius:50%;background:rgba(16,185,129,.12);color:var(--success);display:grid;place-items:center;font-size:38px;font-weight:800;margin:0 auto 18px;animation:pop .45s .1s both}
+.overlay__title{font-size:22px;font-weight:800;color:var(--dark);margin-bottom:8px}
+.overlay__text{font-size:14.5px;color:var(--muted);margin-bottom:20px}
+.overlay__spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+.overlay__countdown{font-size:13px;color:var(--muted);font-weight:600}
+</style>
+</head>
+<body class="lang-ar">
+
+<header class="header">
+  <div class="container header__inner">
+    <a href="#" class="logo">
+      <div class="logo__mark">D</div>
+      <span>Deriv Egypt</span>
+    </a>
+    <button class="lang-toggle" onclick="toggleLang()" aria-label="Switch language">
+      <span class="ar">English</span>
+      <span class="en">العربية</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero__grid">
+    <div>
+      <div class="badge"><span class="badge__dot"></span>
+        <span class="ar">وسيط منظم · دعم عربي 24/7</span>
+        <span class="en">Regulated Broker · Arabic Support 24/7</span>
+      </div>
+      <h1>
+        <span class="ar">ابدأ التداول على <span class="accent">Deriv</span> واكسب من الأسواق العالمية</span>
+        <span class="en">Start Trading on <span class="accent">Deriv</span> and Profit from Global Markets</span>
+      </h1>
+      <p class="hero__sub">
+        <span class="ar">سجل مجاناً في دقيقة واحدة، أكمل التحقق، وابدأ التداول على الفوركس والعملات الرقمية والمؤشرات.</span>
+        <span class="en">Register free in under 1 minute, verify your account, and start trading Forex, Crypto, and Indices.</span>
+      </p>
+      <ul class="hero__points">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="ar">إيداع وسحب سريع عبر فوري وفودافون كاش</span>
+          <span class="en">Fast deposit & withdrawal via Fawry & Vodafone Cash</span>
+        </li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="ar">دعم فني باللغة العربية على مدار الساعة</span>
+          <span class="en">Round-the-clock Arabic customer support</span>
+        </li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="ar">منصة آمنة ومنظمة بأدوات تحليل احترافية</span>
+          <span class="en">Secure, regulated platform with pro analysis tools</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="form-card">
+      <h2 class="form-card__title">
+        <span class="ar">سجل حسابك المجاني</span>
+        <span class="en">Open Your Free Account</span>
+      </h2>
+      <p class="form-card__sub">
+        <span class="ar">ابدأ في أقل من دقيقة — بدون رسوم</span>
+        <span class="en">Start in under 60 seconds — no fees</span>
+      </p>
+
+      <form id="leadForm" novalidate autocomplete="on">
+        <div class="field" id="fName">
+          <label for="name"><span class="ar">الاسم الكامل</span><span class="en">Full Name</span></label>
+          <input type="text" id="name" name="name" placeholder="Mohamed Ahmed" autocomplete="name" required>
+          <div class="field__error" id="eName"></div>
+        </div>
+        <div class="field" id="fEmail">
+          <label for="email"><span class="ar">البريد الإلكتروني</span><span class="en">Email Address</span></label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required>
+          <div class="field__error" id="eEmail"></div>
+        </div>
+        <div class="field" id="fPhone">
+          <label for="phone"><span class="ar">رقم الهاتف (مصر)</span><span class="en">Phone Number (Egypt)</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="+20 1XX XXX XXXX" autocomplete="tel" inputmode="tel" required>
+          <div class="field__error" id="ePhone"></div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span class="ar">احجز حسابك الآن</span>
+          <span class="en">Get My Free Account Now</span>
+        </button>
+
+        <p class="form-card__note">
+          <span class="ar">بالمتابعة، أنت توافق على شروط الخدمة وسياسة الخصوصية. هذه الخدمة مخصصة للمقيمين في مصر (18+).</span>
+          <span class="en">By continuing, you agree to our Terms & Privacy Policy. This service is for Egyptian residents (18+).</span>
+        </p>
+        <div class="form-card__secure">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+          <span class="ar">بياناتك محمية بتشفير SSL</span>
+          <span class="en">Your data is SSL-encrypted</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="trustbar">
+  <div class="container trustbar__inner">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+      <span class="ar">منصة منظمة</span><span class="en">Regulated Platform</span>
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      <span class="ar">فوري · فودافون كاش</span><span class="en">Fawry · Vodafone Cash</span>
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      <span class="ar">تحقق سريع من الهوية</span><span class="en">Fast KYC Verification</span>
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+      <span class="ar">دعم عربي 24/7</span><span class="en">Arabic Support 24/7</span>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section__title"><span class="ar">كيف تبدأ في 3 خطوات</span><span class="en">Get Started in 3 Steps</span></h2>
+    <p class="section__sub"><span class="ar">عملية بسيطة وسريعة — من التسجيل إلى التداول في دقائق</span><span class="en">Simple and fast — from registration to trading in minutes</span></p>
+    <div class="steps">
+      <div class="step">
+        <div class="step__num">1</div>
+        <h3><span class="ar">سجل بياناتك</span><span class="en">Register</span></h3>
+        <p><span class="ar">املأ النموذج أعلاه ببياناتك الأساسية</span><span class="en">Fill in the form above with your basic details</span></p>
+      </div>
+      <div class="step">
+        <div class="step__num">2</div>
+        <h3><span class="ar">فعّل حسابك</span><span class="en">Verify Account</span></h3>
+        <p><span class="ar">أكمل التحقق من الهوية في أقل من 24 ساعة</span><span class="en">Complete KYC verification in under 24 hours</span></p>
+      </div>
+      <div class="step">
+        <div class="step__num">3</div>
+        <h3><span class="ar">ابدأ التداول</span><span class="en">Start Trading</span></h3>
+        <p><span class="ar">أودع وابدأ التداول على الأسواق العالمية</span><span class="en">Deposit and start trading global markets</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--light)">
+  <div class="container">
+    <h2 class="section__title"><span class="ar">الأسئلة الشائعة</span><span class="en">Frequently Asked Questions</span></h2>
+    <p class="section__sub"><span class="ar">كل ما تحتاج معرفته قبل البدء</span><span class="en">Everything you need to know before you start</span></p>
+    <div class="faq" id="faq">
+      <div class="faq__item">
+        <button class="faq__q" type="button">
+          <span class="ar">ما هو الحد الأدنى للإيداع؟</span>
+          <span class="en">What is the minimum deposit?</span>
+        </button>
+        <div class="faq__a"><span class="ar">يبدأ الإيداع من 5 دولارات فقط، مع طرق دفع محلية مثل فوري وفودافون كاش.</span><span class="en">Deposits start from just $5, with local Egyptian payment methods like Fawry and Vodafone Cash.</span></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" type="button">
+          <span class="ar">كم يستغرق التحقق من الهوية؟</span>
+          <span class="en">How long does verification take?</span>
+        </button>
+        <div class="faq__a"><span class="ar">عادة أقل من 24 ساعة بعد رفع بطاقة الرقم القومي.</span><span class="en">Usually under 24 hours after uploading your national ID.</span></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" type="button">
+          <span class="ar">هل الدعم متاح باللغة العربية؟</span>
+          <span class="en">Is support available in Arabic?</span>
+        </button>
+        <div class="faq__a"><span class="ar">نعم، فريق الدعم متاح 24/7 بالعربية عبر الدردشة والواتساب.</span><span class="en">Yes — our support team is available 24/7 in Arabic via chat and WhatsApp.</span></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" type="button">
+          <span class="ar">هل التداول آمن؟</span>
+          <span class="en">Is trading safe?</span>
+        </button>
+        <div class="faq__a"><span class="ar">نعم، المنصة منظمة وتستخدم تشفير SSL لحماية بياناتك وأموالك.</span><span class="en">Yes — the platform is regulated and uses SSL encryption to protect your data and funds.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p><strong>Deriv Egypt</strong> — <span class="ar">التداول ينطوي على مخاطر. استثمر بمسؤولية.</span><span class="en">Trading involves risk. Invest responsibly.</span></p>
+    <p>© <span id="year"></span> Deriv Egypt. <span class="ar">جميع الحقوق محفوظة.</span><span class="en">All rights reserved.</span></p>
+  </div>
+</footer>
+
+<div class="sticky-cta">
+  <button onclick="document.getElementById('leadForm').scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('name').focus();">
+    <span class="ar">سجل الآن مجاناً</span>
+    <span class="en">Register Free Now</span>
+  </button>
+</div>
+
+<div class="overlay" id="successOverlay" hidden>
+  <div class="overlay__card">
+    <div class="overlay__icon">✓</div>
+    <h2 class="overlay__title">
+      <span class="ar">تم التسجيل بنجاح!</span>
+      <span class="en">Registration Successful!</span>
+    </h2>
+    <p class="overlay__text">
+      <span class="ar">شكراً لك! يتم الآن تحويلك إلى منصة التداول لإكمال التسجيل...</span>
+      <span class="en">Thank you! Redirecting you to the trading platform to complete registration...</span>
+    </p>
+    <div class="overlay__spinner"></div>
+    <p class="overlay__countdown" id="countdown"></p>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   ⚙️ CONFIGURATION — aap ka account
+   ========================================================= */
+const CONFIG = {
+  // PropellerAds Conversion Pixel
+  AID: '246772',
+  PID: '',
+  TID: '63885',
+  PAYOUT: '0.5',                 // ⬅️ apna actual CPA rate daalein
+
+  // Deriv affiliate link
+  OFFER_URL: 'https://t.deriv.link?t=FTKHU4SSTCVV',
+
+  // Google Apps Script Web App URL (Step 3 mein milta hai)
+  // Example: 'https://script.google.com/macros/s/AKfycb.../exec'
+  LEAD_ENDPOINT: '',
+
+  // Redirect delay (ms)
+  REDIRECT_DELAY: 3000,
+};
+/* ========================================================= */
+
+function setLang(lang){
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  document.body.classList.toggle('lang-ar', lang === 'ar');
+  document.body.classList.toggle('lang-en', lang === 'en');
+  try { localStorage.setItem('lang', lang); } catch(e){}
+}
+function toggleLang(){
+  const cur = document.body.classList.contains('lang-ar') ? 'ar' : 'en';
+  setLang(cur === 'ar' ? 'en' : 'ar');
+}
+(function(){
+  let saved = 'ar';
+  try { saved = localStorage.getItem('lang') || 'ar'; } catch(e){}
+  setLang(saved);
+})();
+
+const URL_PARAMS = new URLSearchParams(location.search);
+const SUBID =
+  URL_PARAMS.get('subid') ||
+  URL_PARAMS.get('sub_id') ||
+  URL_PARAMS.get('click_id') ||
+  URL_PARAMS.get('visitor_id') ||
+  ('lp_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8));
+try { sessionStorage.setItem('subid', SUBID); } catch(e){}
+console.log('[TRACKING] SUBID =', SUBID);
+
+const $ = (id) => document.getElementById(id);
+const nameInput = $('name'), emailInput = $('email'), phoneInput = $('phone');
+const submitBtn = $('submitBtn');
+const leadForm = $('leadForm');
+
+function normalizeEgyptPhone(raw){
+  let v = String(raw || '').replace(/\D/g, '');
+  if (v.startsWith('0020')) v = v.slice(4);
+  else if (v.startsWith('20')) v = v.slice(2);
+  else if (v.startsWith('0'))  v = v.slice(1);
+  return v;
+}
+
+function validate(){
+  const errors = {};
+  const name = nameInput.value.trim();
+  if (name.length < 2) errors.name = t('nameError');
+  const email = emailInput.value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = t('emailError');
+  const phone = normalizeEgyptPhone(phoneInput.value);
+  if (!/^1[0125]\d{8}$/.test(phone)) errors.phone = t('phoneError');
+  return { errors, data: { name, email, phone } };
+}
+function t(key){
+  const ar = {
+    nameError: 'يرجى إدخال اسمك الكامل (حرفين على الأقل)',
+    emailError: 'يرجى إدخال بريد إلكتروني صحيح',
+    phoneError: 'يرجى إدخال رقم هاتف مصري صحيح (مثل 01012345678)',
+  };
+  const en = {
+    nameError: 'Please enter your full name (min 2 characters)',
+    emailError: 'Please enter a valid email address',
+    phoneError: 'Please enter a valid Egyptian phone (e.g. 01012345678)',
+  };
+  return document.body.classList.contains('lang-ar') ? ar[key] : en[key];
+}
+function clearErrors(){
+  ['fName','fEmail','fPhone'].forEach(id => $(id).classList.remove('error'));
+}
+function showErrors(errors){
+  if (errors.name){ $('fName').classList.add('error'); $('eName').textContent = errors.name; }
+  if (errors.email){ $('fEmail').classList.add('error'); $('eEmail').textContent = errors.email; }
+  if (errors.phone){ $('fPhone').classList.add('error'); $('ePhone').textContent = errors.phone; }
+}
+
+function fireConversionPixel(){
+  if (!CONFIG.AID || !CONFIG.TID){ console.warn('[TRACKING] AID/TID missing'); return; }
+  const url =
+    `https://ad.propellerads.com/conversion.php` +
+    `?aid=${encodeURIComponent(CONFIG.AID)}` +
+    `&pid=${encodeURIComponent(CONFIG.PID)}` +
+    `&tid=${encodeURIComponent(CONFIG.TID)}` +
+    `&visitor_id=${encodeURIComponent(SUBID)}` +
+    `&payout=${encodeURIComponent(CONFIG.PAYOUT)}` +
+    `&_=${Date.now()}`;
+  new Image().src = url;
+  console.log('[TRACKING] Pixel fired:', url);
+}
+
+function showSuccessOverlay(){
+  const overlay = $('successOverlay');
+  const cd = $('countdown');
+  overlay.hidden = false;
+  document.body.style.overflow = 'hidden';
+  let seconds = Math.ceil(CONFIG.REDIRECT_DELAY / 1000);
+  const isAr = document.body.classList.contains('lang-ar');
+  const render = () => {
+    cd.textContent = isAr
+      ? `جاري التحويل خلال ${seconds} ثانية...`
+      : `Redirecting in ${seconds} second${seconds !== 1 ? 's' : ''}...`;
+  };
+  render();
+  const iv = setInterval(() => {
+    seconds -= 1;
+    if (seconds <= 0) { clearInterval(iv); return; }
+    render();
+  }, 1000);
+}
+
+function buildOfferUrl(){
+  try {
+    const u = new URL(CONFIG.OFFER_URL);
+    u.searchParams.set('subid', SUBID);
+    u.searchParams.set('aff_sub', SUBID);
+    u.searchParams.set('s1', SUBID);
+    u.searchParams.set('utm_source', 'propellerads');
+    u.searchParams.set('utm_content', SUBID);
+    return u.toString();
+  } catch (e) {
+    const sep = CONFIG.OFFER_URL.includes('?') ? '&' : '?';
+    return CONFIG.OFFER_URL + sep + 'subid=' + encodeURIComponent(SUBID);
+  }
+}
+
+function sendLeadToSheet(payload){
+  if (!CONFIG.LEAD_ENDPOINT){
+    console.warn('[LEAD] LEAD_ENDPOINT not set — lead not saved');
+    return;
+  }
+  // Google Apps Script ke liye no-cors + text/plain zaroori hai
+  fetch(CONFIG.LEAD_ENDPOINT, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload),
+    keepalive: true,
+  })
+  .then(() => console.log('[LEAD] Sent to Google Sheets'))
+  .catch(err => console.warn('[LEAD] Failed:', err));
+}
+
+let submitting = false;
+leadForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (submitting) return;
+
+  clearErrors();
+  const { errors, data } = validate();
+  if (Object.keys(errors).length) {
+    showErrors(errors);
+    return;
+  }
+
+  submitting = true;
+  submitBtn.disabled = true;
+  submitBtn.classList.add('loading');
+
+  const payload = {
+    name:  data.name,
+    email: data.email,
+    phone: '+20' + data.phone,
+    subid: SUBID,
+    page:  location.href,
+    ts:    new Date().toISOString(),
+  };
+
+  // 1) PropellerAds pixel
+  fireConversionPixel();
+
+  // 2) Google Sheet mein lead save (fire & forget)
+  sendLeadToSheet(payload);
+
+  // 3) Overlay show karein
+  showSuccessOverlay();
+
+  // 4) Deriv par redirect
+  setTimeout(() => {
+    window.location.href = buildOfferUrl();
+  }, CONFIG.REDIRECT_DELAY);
+});
+
+document.querySelectorAll('.faq__q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const open = item.classList.contains('open');
+    document.querySelectorAll('.faq__item').forEach(i => i.classList.remove('open'));
+    if (!open) item.classList.add('open');
+  });
+});
+
+$('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
