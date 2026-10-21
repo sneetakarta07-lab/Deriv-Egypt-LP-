@@ -223,18 +223,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 <script>
 /* =========================================================
-   ⚙️ CONFIGURATION — PopAds (full macro capture)
+   ⚙️ CONFIGURATION — updated with correct /exec URL
    ========================================================= */
 const CONFIG = {
   POPADS_AID: 'ac7e32847e3e8169f251a1dff13a8d7b',
   POPADS_VALUE: '0',
   OFFER_URL: 'https://t.deriv.link?t=FTKHU4SSTCVV',
-  LEAD_ENDPOINT: 'https://script.google.com/macros/library/d/1epWaHBspdyAs9hWE_FtsbBoLb8ep0mRE1kkOubpUQoqVCTfiW09DV50e/2',
+  LEAD_ENDPOINT: 'https://script.google.com/macros/s/AKfycbx7itzIyM8dYsd2g-V5PpM8ar4-PIHp8pWCqIHUpTtenppbhlSS6w8T4otCAJ_ngTpk/exec',
   REDIRECT_DELAY: 3000,
 };
 /* ========================================================= */
 
-/* ---------- URL Param helper ---------- */
 const URL_PARAMS = new URLSearchParams(location.search);
 function getParam(keys){
   for (const k of keys){
@@ -246,7 +245,6 @@ function getParam(keys){
   return '';
 }
 
-/* ---------- Capture all PopAds macros ---------- */
 const TRACKING = {
   impression_id:   getParam(['impression_id','imp','visitor_id','subid']) || ('lp_' + Date.now() + '_' + Math.random().toString(36).slice(2,8)),
   website_id:      getParam(['website_id','wid']),
@@ -274,7 +272,6 @@ const TRACKING = {
 try { sessionStorage.setItem('subid', TRACKING.impression_id); } catch(e){}
 console.log('[TRACKING] All params captured:', TRACKING);
 
-/* ---------- Language ---------- */
 function setLang(lang){
   document.documentElement.lang = lang;
   document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
@@ -288,7 +285,6 @@ function toggleLang(){
 }
 (function(){ let s='ar'; try { s = localStorage.getItem('lang')||'ar'; } catch(e){} setLang(s); })();
 
-/* ---------- Validation ---------- */
 const $ = (id) => document.getElementById(id);
 const nameInput = $('name'), emailInput = $('email'), phoneInput = $('phone');
 const submitBtn = $('submitBtn'), leadForm = $('leadForm');
@@ -320,7 +316,6 @@ function showErrors(errors){
   if (errors.phone){ $('fPhone').classList.add('error'); $('ePhone').textContent = errors.phone; }
 }
 
-/* ---------- PopAds conversion pixel ---------- */
 function firePopAdsPixel(){
   if (!CONFIG.POPADS_AID){ console.warn('[TRACKING] POPADS_AID missing'); return; }
   const url =
@@ -333,7 +328,6 @@ function firePopAdsPixel(){
   console.log('[TRACKING] PopAds pixel fired:', url);
 }
 
-/* ---------- Overlay ---------- */
 function showSuccessOverlay(){
   const overlay = $('successOverlay'), cd = $('countdown');
   overlay.hidden = false;
@@ -345,7 +339,6 @@ function showSuccessOverlay(){
   const iv = setInterval(() => { s -= 1; if (s <= 0) { clearInterval(iv); return; } render(); }, 1000);
 }
 
-/* ---------- Deriv redirect URL ---------- */
 function buildOfferUrl(){
   try {
     const u = new URL(CONFIG.OFFER_URL);
@@ -361,7 +354,6 @@ function buildOfferUrl(){
   }
 }
 
-/* ---------- Send lead to Google Sheet ---------- */
 function sendLeadToSheet(payload){
   if (!CONFIG.LEAD_ENDPOINT){ console.warn('[LEAD] LEAD_ENDPOINT not set'); return; }
   fetch(CONFIG.LEAD_ENDPOINT, {
@@ -375,7 +367,6 @@ function sendLeadToSheet(payload){
   .catch(err => console.warn('[LEAD] Failed:', err));
 }
 
-/* ---------- Form submit ---------- */
 let submitting = false;
 leadForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -424,7 +415,6 @@ leadForm.addEventListener('submit', (e) => {
   setTimeout(() => { window.location.href = buildOfferUrl(); }, CONFIG.REDIRECT_DELAY);
 });
 
-/* ---------- FAQ ---------- */
 document.querySelectorAll('.faq__q').forEach(btn => {
   btn.addEventListener('click', () => {
     const item = btn.parentElement;
